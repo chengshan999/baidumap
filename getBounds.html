@@ -31,17 +31,20 @@
     /*var bs=map.getBounds();
     var bssw=bs.getSouthWest;//getSouthWest();//getSouthWest
     var bsne=bs.getNorthEast;//getNorthEast*/
+    writeObj(map);
     var cb=map.getCenter();
-
-    //alert(cb);
+    writeObj(cb);
     var point=new BMap.Point(cb.lng,cb.lat);//(bssw.lng+bsne.lng)/2,(bssw.lat+bsne.lat)/2
     var marker=new BMap.Marker(point);
     map.addOverlay(marker);
-    map.addEventListener('dragging',function(){
+    function moving(){
         var cb1=map.getCenter();
+        writeObj(cb1);
         var point1=new BMap.Point(cb1.lng,cb1.lat);
         marker.setPosition(point1);
-    });
+    }
+//    window.onload=moving();
+    map.addEventListener('dragging',moving());
 
 </script>
 </body>

@@ -16,7 +16,9 @@
 <div id="container"></div>
 
 <script type="text/javascript">
-
+    var map=new BMap.Map('container',{enableMapClick:false});
+    map.centerAndZoom('成都',13);
+    map.enableScrollWheelZoom(true);
 </script>
 </body>
 </html>
