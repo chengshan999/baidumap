@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!--<meta charset="UTF-8">-->
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>baidumap_test</title>
+    <script src="http://api.map.baidu.com/api?v=2.0&ak=UQRkijgp4GWEFa1g2cRQpytGox5nf5dy" type="text/javascript"></script>
+    <style type="text/css">
+        html{height:100%}
+        body{height:100%;margin:0px;padding:0px}
+        #container{height:100%}
+    </style>
+</head>
+<body>
+<div id="container"></div>
+
+<script type="text/javascript">
+    function writeObj(obj){
+        var description = "";
+        for(var i in obj){
+            var property=obj[i];
+            description+=i+" = "+property+"\n";
+        }
+        alert(description);
+    }
+
+    var map=new BMap.Map('container');
+    map.centerAndZoom('上海',15);
+
+    /*var bs=map.getBounds();
+    var bssw=bs.getSouthWest;//getSouthWest();//getSouthWest
+    var bsne=bs.getNorthEast;//getNorthEast*/
+    var cb=map.getCenter();
+
+    //alert(cb);
+    var point=new BMap.Point(cb.lng,cb.lat);//(bssw.lng+bsne.lng)/2,(bssw.lat+bsne.lat)/2
+    var marker=new BMap.Marker(point);
+    map.addOverlay(marker);
+    map.addEventListener('dragging',function(){
+        var cb1=map.getCenter();
+        var point1=new BMap.Point(cb1.lng,cb1.lat);
+        marker.setPosition(point1);
+    });
+
+</script>
+</body>
+</html>

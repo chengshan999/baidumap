@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!--<meta charset="UTF-8">-->
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>baidumap_test</title>
+    <script src="http://api.map.baidu.com/api?v=2.0&ak=UQRkijgp4GWEFa1g2cRQpytGox5nf5dy" type="text/javascript"></script>
+    <style type="text/css">
+        html{height:100%}
+        body{height:100%;margin:0px;padding:0px}
+        #container{height:50%}
+    </style>
+</head>
+<body>
+<div id="container"></div>
+<div onclick="moveToGZ();">点击我看广州</div>
+<div onclick="moreBig();">点击放大</div>
+<script type="text/javascript">
+    var map=new BMap.Map('container',{minZoom:6,maxZoom:15});
+    map.centerAndZoom('上海',10);
+    map.enableScrollWheelZoom(true);
+    map.disableDragging();//禁止拖拽
+    setTimeout(function (){
+        map.enableDragging();//允许拖拽
+    },5000);
+    function moveToGZ(){
+        map.panTo(new BMap.Point(113.27,23.13));//panTO()只能用经纬度形式，不能用城市名形式
+    }
+    function moreBig(){
+        map.setZoom(15);//直接指定放大级别
+    }
+</script>
+</body>
+</html>
