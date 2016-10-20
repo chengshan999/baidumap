@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!--<meta charset="UTF-8">-->
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>baidumap_test</title>
+
+    <link rel="stylesheet" href="src/tip-yellow/tip-yellow.css" type="text/css" />
+    <link rel="stylesheet" href="src/tip-violet/tip-violet.css" type="text/css" />
+    <link rel="stylesheet" href="src/tip-darkgray/tip-darkgray.css" type="text/css" />
+    <link rel="stylesheet" href="src/tip-skyblue/tip-skyblue.css" type="text/css" />
+    <link rel="stylesheet" href="src/tip-yellowsimple/tip-yellowsimple.css" type="text/css" />
+    <link rel="stylesheet" href="src/tip-twitter/tip-twitter.css" type="text/css" />
+    <link rel="stylesheet" href="src/tip-green/tip-green.css" type="text/css" />
+
+    <script type="text/javascript" src="includes/jquery-1.4.2.min.js"></script>
+    <script type="text/javascript" src="src/jquery.poshytip.js"></script>
+
+    <script src="http://api.map.baidu.com/api?v=2.0&ak=UQRkijgp4GWEFa1g2cRQpytGox5nf5dy" type="text/javascript"></script>
+    <style type="text/css">
+        html{height:100%}
+        body{height:100%;margin:0px;padding:0px}
+        #container{height:100%}
+
+    </style>
+</head>
+<body>
+<div id="container">
+
+</div>
+<img id="logo" src="http://developer.baidu.com/map/jsdemo/img/fox.gif" width="200" />
+
+<script type="text/javascript">
+    /*创建地图对象 start*/
+    var map= new BMap.Map('container');
+    map.centerAndZoom('上海',13);
+    map.enableScrollWheelZoom();
+    map.disableInertialDragging();
+    /*创建地图对象 end*/
+
+    /*定位箭头图标到地图中心点 start*/
+    var ww=document.getElementById('container').offsetWidth;
+    var wh=document.getElementById('container').offsetHeight;
+    var logo=document.getElementById('logo');
+    var logow=logo.width;
+    var logoh=logo.height;
+    /*alert(logow);
+    alert(logoh);
+    alert((ww-logow)/2);
+    alert(wh/2);*/
+    logo.style.position='absolute';
+    logo.style.bottom=wh/2+'px';
+    logo.style.left=(ww-logow)/2+'px';
+    /*定位箭头图标到地图中心点 end*/
+
+//    var bottom=wh/2;
+//    var left=(ww-logow)/2;
+//    logo.setAttribute('style','display:block;position:absolute;bottom:'+bottom+'px;left:'+left+'px;z-index:999;');
+
+    //var string="<p id='addremsg' style='background-color:grey;border-radius:3px;'>";
+
+    /*var pE=document.createElement('p');
+    pE.style.backgroundColor='grey';
+    pE.style.borderRadius='3px';*/
+
+    var geoc=new BMap.Geocoder();
+
+//    var c=map.getCenter();
+//    writeObj(c);
+//    geoc.getLocation(c,function(ci){
+//        var addrinfo=ci.addressComponents;
+//        var firstAddr=addrinfo.province+addrinfo.city+addrinfo.district+addrinfo.street+addrinfo.streetNumber;
+//        alert(firstAddr);
+        $('#logo').poshytip({
+            content: '拖动地图以选择起点！',
+            className: 'tip-yellowsimple',
+            showOn: 'none',
+            alignTo: 'target',
+            alignX: 'center',//inner-left
+            offsetX: 0,
+            offsetY: 5
+        });
+        $('#logo').poshytip('show');
+//    });
+
+    function moveGetAddr(){
+        var cc=map.getCenter();
+        geoc.getLocation(cc,function(cic){
+            var addrinfoC=cic.addressComponents;//addressComponents
+//            pE.innerText=addrinfo.province+addrinfo.city+addrinfo.district+addrinfo.street+addrinfo.streetNumber;
+
+
+            $('#logo').poshytip('update', addrinfoC.province+addrinfoC.city+addrinfoC.district+addrinfoC.street+addrinfoC.streetNumber);
+            /*var infoWindow=new BMap.InfoWindow(string);
+             map.openInfoWindow(infoWindow,c);//从信息窗口显示地址信息，效果不好*/
+        });
+    }
+    map.addEventListener('dragend',moveGetAddr);
+    map.addEventListener('touchmove',moveGetAddr);
+
+
+
+
+    function writeObj(obj){
+        var description = "";
+        for(var i in obj){
+            var property=obj[i];
+            description+=i+" = "+property+"\n";
+        }
+        alert(description);
+    }
+</script>
+</body>
+</html>

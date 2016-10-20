@@ -15,7 +15,7 @@
 </html>
 <script type="text/javascript">
     // 百度地图API功能
-    var map = new BMap.Map("allmap");
+    var map = new BMap.Map("allmap",{enableMapClick:false});
     var point = new BMap.Point(116.404, 39.915);
     map.centerAndZoom(point, 15);
     map.enableScrollWheelZoom(true);
@@ -35,12 +35,12 @@
         marker2.setPosition(new BMap.Point(cp1.lng,cp1.lat));
     }
 
-    //map.addEventListener('movestart',moving);
+    map.addEventListener('movestart',moving);
     map.addEventListener('moving',moving);
-    //map.addEventListener('moved',moving);
-    //map.addEventListener('touchstart',moving);
+    map.addEventListener('moved',moving);
+    map.addEventListener('touchstart',moving);
     map.addEventListener('touchmove',moving);
-//    map.addEventListener('touchend',moving);
+    map.addEventListener('touchend',moving);
     function writeObj(obj){
         var description = "";
         for(var i in obj){
