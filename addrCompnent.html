@@ -34,46 +34,15 @@
 <script type="text/javascript">
     /*创建地图对象 start*/
     var map= new BMap.Map('container');
-    map.centerAndZoom('上海',13);
+    map.centerAndZoom('上海',15);
     map.enableScrollWheelZoom();
     map.disableInertialDragging();
     /*创建地图对象 end*/
 
-    /*定位箭头图标到地图中心点 start*/
-    var ww=document.getElementById('container').offsetWidth;
-    var wh=document.getElementById('container').offsetHeight;
-    var logo=document.getElementById('logo');
-    var logow=logo.width;
-    var logoh=logo.height;
-    /*alert(logow);
-    alert(logoh);
-    alert((ww-logow)/2);
-    alert(wh/2);*/
-    logo.style.position='absolute';
-    logo.style.bottom=wh/2+'px';
-    logo.style.left=(ww-logow)/2+'px';
-    /*定位箭头图标到地图中心点 end*/
-
-//    var bottom=wh/2;
-//    var left=(ww-logow)/2;
-//    logo.setAttribute('style','display:block;position:absolute;bottom:'+bottom+'px;left:'+left+'px;z-index:999;');
-
-    //var string="<p id='addremsg' style='background-color:grey;border-radius:3px;'>";
-
-    /*var pE=document.createElement('p');
-    pE.style.backgroundColor='grey';
-    pE.style.borderRadius='3px';*/
-
-    var geoc=new BMap.Geocoder();
-
-//    var c=map.getCenter();
-//    writeObj(c);
-//    geoc.getLocation(c,function(ci){
-//        var addrinfo=ci.addressComponents;
-//        var firstAddr=addrinfo.province+addrinfo.city+addrinfo.district+addrinfo.street+addrinfo.streetNumber;
-//        alert(firstAddr);
+    /*设置Poshtip控件并启动 start*/
+    function addPoshtip(msg){
         $('#logo').poshytip({
-            content: '拖动地图以选择起点！',
+            content: msg,
             className: 'tip-yellowsimple',
             showOn: 'none',
             alignTo: 'target',
@@ -82,26 +51,65 @@
             offsetY: 5
         });
         $('#logo').poshytip('show');
-//    });
+    }
+    var firstMsg='定位中...';
+    addPoshtip(firstMsg);
+    /*设置Poshtip控件并启动 end*/
+
+    function updatePoshtip(msg){
+        $('#logo').poshytip('update',msg);
+    }
+
+    /*获取当前位置-定位start*/
+    var geolocation=new BMap.Geolocation();
+
+    geolocation.getCurrentPosition(function (r){
+        if(this.getStatus() == BMAP_STATUS_SUCCESS){
+            map.panTo(r.point);
+            geoc.getLocation(r.point,function(ci){
+                var addrinfo=ci.addressComponents;
+                var firstMsg=addrinfo.province+addrinfo.city+addrinfo.district+addrinfo.street+addrinfo.streetNumber;
+                updatePoshtip(firstMsg);
+            });
+        }else{
+            var firstMsg='定位失败，拖动地图以选择起点！';
+            updatePoshtip(firstMsg);
+        }
+    },{enableHighAccuracy:true});
+    /*获取当前位置-定位end*/
+
+    /*定位箭头图标到地图中心点 start*/
+    var ww=document.getElementById('container').offsetWidth;
+    var wh=document.getElementById('container').offsetHeight;
+    var logo=document.getElementById('logo');
+    var logow=logo.width;
+    var logoh=logo.height;
+    logo.style.position='absolute';
+    logo.style.bottom=wh/2+'px';
+    logo.style.left=(ww-logow)/2+'px';
+    /*定位箭头图标到地图中心点 end*/
+
+    /*获取中心点的地址信息 start*/
+    var geoc=new BMap.Geocoder();
 
     function moveGetAddr(){
         var cc=map.getCenter();
         geoc.getLocation(cc,function(cic){
             var addrinfoC=cic.addressComponents;//addressComponents
-//            pE.innerText=addrinfo.province+addrinfo.city+addrinfo.district+addrinfo.street+addrinfo.streetNumber;
-
-
-            $('#logo').poshytip('update', addrinfoC.province+addrinfoC.city+addrinfoC.district+addrinfoC.street+addrinfoC.streetNumber);
+            updatePoshtip(addrinfoC.province+addrinfoC.city+addrinfoC.district+addrinfoC.street+addrinfoC.streetNumber);
             /*var infoWindow=new BMap.InfoWindow(string);
              map.openInfoWindow(infoWindow,c);//从信息窗口显示地址信息，效果不好*/
         });
     }
+    /*获取中心点的地址信息 start*/
+
+    /*添加移动监听事件*/
     map.addEventListener('dragend',moveGetAddr);
     map.addEventListener('touchmove',moveGetAddr);
 
 
 
-
+    /*打印JS对象并弹出*/
     function writeObj(obj){
         var description = "";
         for(var i in obj){
